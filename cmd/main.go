@@ -1,31 +1,39 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	fmt.Println("Hello World")
-	router := http.NewServeMux()
+	r := gin.Default()
 
-	router.HandleFunc("GET /api/launches", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("List Launches")
+	r.GET("/api/launches", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "List Launches",
+		})
 	})
 
-	router.HandleFunc("GET /api/launches/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		fmt.Printf("Get Launch based on id: %v", id)
+	r.GET("/api/launches/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		c.JSON(200, gin.H{
+			"message": "List Launch",
+			"id":      id,
+		})
 	})
 
-	router.HandleFunc("POST /api/launches", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Create Launch")
+	r.POST("/api/launches", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Post a launch",
+		})
 	})
 
-	router.HandleFunc("DELETE /api/launches/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		fmt.Printf("Delete Launch based on id: %v", id)
+	r.DELETE("/api/launches/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		c.JSON(200, gin.H{
+			"message": "Delete a launch",
+			"id":      id,
+		})
 	})
 
-	http.ListenAndServe(":8080", router)
+	r.Run()
 }
