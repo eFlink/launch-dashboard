@@ -7,22 +7,27 @@ import (
 )
 
 func GetAll(c *gin.Context) {
-	// Get data of req body
 
-	// Get all the launches
+	var launches []model.Launch
+	result := initializer.DB.Find(&launches)
 
-	// Return it
+	if result.Error != nil {
+		c.Status(400)
+		return
+	}
 
 	c.JSON(200, gin.H{
-		"message": "List Launches",
+		"launches": launches,
 	})
 }
 
 func GetByID(c *gin.Context) {
 	id := c.Param("id")
+
+	var launch model.Launch
+	initializer.DB.First(&launch, "id = '"+id+"'")
 	c.JSON(200, gin.H{
-		"message": "List Launch",
-		"id":      id,
+		"id": launch,
 	})
 }
 func CreateLaunch(c *gin.Context) {
@@ -39,7 +44,7 @@ func CreateLaunch(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"message": launch,
+		"launch": launch,
 	})
 }
 
